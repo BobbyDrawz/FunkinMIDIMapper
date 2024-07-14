@@ -2,6 +2,7 @@
 
 Funkin' MIDI Mapper (FMM) is a tool to convert MIDI files into chart files for Friday Night Funkin' (FNF) which can be found here:
 - [FNF Itch.io Page](https://ninja-muffin24.itch.io/funkin)
+
 It is a heavily modified fork of the SiIva Note Importer For FNF (SNIFF) released by MtH which can be found here:
 - [SNIFF Repository](https://github.com/PrincessMtH/SNIFF)
 
