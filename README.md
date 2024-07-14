@@ -44,6 +44,6 @@ Fan contributions are welcome! Please submit pull requests or issues as needed.
 - CAM events can only be caught up by the program if they are placed at the very start of a bar.
 - 
 ## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/BobbyDrawz/FunkinMIDIMapper/blob/main/LICENSE.md) file for details.
 
 Now go out there and have fun charting!
