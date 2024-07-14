@@ -42,5 +42,8 @@ Fan contributions are welcome! Please submit pull requests or issues as needed.
 - Notes are sustained if they are 2 steps or longer [a step is 1/16 of a bar], but if your note is shorter, you can lower the velocity to below 50% if you want to sustain them anyway.
 - This was all based off of the SNIFF source code, meaning this program is written in C#.
 - CAM events can only be caught up by the program if they are placed at the very start of a bar.
+- 
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 Now go out there and have fun charting!
