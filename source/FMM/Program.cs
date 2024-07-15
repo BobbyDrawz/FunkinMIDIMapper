@@ -120,16 +120,16 @@ namespace FMM
 
                         string notesFilePath = Path.Combine(outputDirectory, "notes.json");
                         File.WriteAllText(notesFilePath, songJson.ToString(Formatting.Indented));
-                        Console.WriteLine($"Generated base note chart at {notesFilePath}");
+                        Console.WriteLine("---Generated base note chart.---");
 
                         FunkinCam.GenerateCameraFile(midiEvents, bpm, Path.Combine(outputDirectory, "camera.txt"));
                         string cameraFilePath = Path.Combine(outputDirectory, "camera.txt");
-                        Console.WriteLine($"Generated camera text file at {cameraFilePath}");
+                        Console.WriteLine("---Generated camera text file.---");
 
                         // Combine files to create chart.json
                         NoteCameraCombiner.CombineFiles(notesFilePath, cameraFilePath, Path.Combine(outputDirectory, "chart.json"));
                         string chartFilePath = Path.Combine(outputDirectory, "chart.json");
-                        Console.WriteLine($"Combined files to produce chart.json at {chartFilePath}");
+                        Console.WriteLine("---Combined files to produce chart.json.---");
 
                         // Ask if the user wants to delete remnants
                         while (true)
