@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
@@ -324,23 +324,103 @@ namespace FMM
 
         private static void CombineCharts()
         {
-            Console.WriteLine("Enter the first chart file path (JSON format): ");
-            string chartFilePath1 = Console.ReadLine();
-
-            Console.WriteLine("Enter the second chart file path (JSON format): ");
-            string chartFilePath2 = Console.ReadLine();
-
-            if (File.Exists(chartFilePath1) && File.Exists(chartFilePath2))
+            try
             {
-                JObject chartJson1 = JObject.Parse(File.ReadAllText(chartFilePath1));
-                JObject chartJson2 = JObject.Parse(File.ReadAllText(chartFilePath2));
+                Console.WriteLine("Enter the directory containing the charts (initial directory): ");
+                string initialDirectory = Console.ReadLine();
 
-                NoteCameraCombiner.CombineFiles(chartFilePath1, chartFilePath2, Path.Combine(Directory.GetCurrentDirectory(), "combined_chart.json"));
-                Console.WriteLine("Combine charts function completed. Combined chart saved in combined_chart.json.");
+                Console.WriteLine("Enter the song name: ");
+                string songName = Console.ReadLine();
+
+                Console.WriteLine("Enter the BPM: ");
+                if (!float.TryParse(Console.ReadLine(), out float bpm))
+                {
+                    Console.WriteLine("Invalid BPM. Please enter a numeric value.");
+                    return;
+                }
+
+                Console.WriteLine("Does the chart need voices? (Enter 1 for Yes, 0 for No): ");
+                if (!int.TryParse(Console.ReadLine(), out int needsVoices))
+                {
+                    Console.WriteLine("Invalid input for needsVoices. Please enter 1 or 0.");
+                    return;
+                }
+
+                Console.WriteLine("Enter the player 1 name: ");
+                string player1 = Console.ReadLine();
+
+                Console.WriteLine("Enter the player 2 name: ");
+                string player2 = Console.ReadLine();
+
+                Console.WriteLine("Enter the game speed: ");
+                if (!float.TryParse(Console.ReadLine(), out float speed))
+                {
+                    Console.WriteLine("Invalid speed. Please enter a numeric value.");
+                    return;
+                }
+
+                Console.WriteLine("Enter the first chart file path (relative to the initial directory, JSON format): ");
+                string chartFilePath1 = Path.Combine(initialDirectory, Console.ReadLine());
+
+                Console.WriteLine("Enter the note type for the first chart (or 'default' for none): ");
+                string noteType1 = Console.ReadLine();
+
+                Console.WriteLine("Enter the second chart file path (relative to the initial directory, JSON format): ");
+                string chartFilePath2 = Path.Combine(initialDirectory, Console.ReadLine());
+
+                Console.WriteLine("Enter the note type for the second chart (or 'default' for none): ");
+                string noteType2 = Console.ReadLine();
+
+                if (File.Exists(chartFilePath1) && File.Exists(chartFilePath2))
+                {
+                    JObject chartJson1 = JObject.Parse(File.ReadAllText(chartFilePath1));
+                    JObject chartJson2 = JObject.Parse(File.ReadAllText(chartFilePath2));
+
+                    // Apply the note type as a fourth parameter in each note of the first chart
+                    if (noteType1.ToLower() != "default")
+                    {
+                        AddNoteTypeToSectionNotes(chartJson1, noteType1);
+                    }
+
+                    // Apply the note type as a fourth parameter in each note of the second chart
+                    if (noteType2.ToLower() != "default")
+                    {
+                        AddNoteTypeToSectionNotes(chartJson2, noteType2);
+                    }
+
+                    List<JObject> charts = new List<JObject> { chartJson1, chartJson2 };
+
+                    NoteCameraCombiner.CombineCharts(initialDirectory, songName, bpm, needsVoices, player1, player2, speed, charts);
+
+                    Console.WriteLine("Charts combined successfully.");
+                }
+                else
+                {
+                    Console.WriteLine("One or both of the specified files do not exist.");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                Console.WriteLine("One or both of the specified files do not exist.");
+                Console.WriteLine("An error occurred during the combine charts operation: " + ex.Message);
+                Console.WriteLine(ex.StackTrace);
+            }
+        }
+
+        private static void AddNoteTypeToSectionNotes(JObject chartJson, string noteType)
+        {
+            JArray sections = (JArray)chartJson["song"]["notes"];
+            foreach (JObject section in sections)
+            {
+                JArray sectionNotes = (JArray)section["sectionNotes"];
+                for (int i = 0; i < sectionNotes.Count; i++)
+                {
+                    JArray note = (JArray)sectionNotes[i];
+                    if (note.Count == 3)
+                    {
+                        // Add the noteType as the 4th parameter
+                        note.Add(noteType);
+                    }
+                }
             }
         }
 
